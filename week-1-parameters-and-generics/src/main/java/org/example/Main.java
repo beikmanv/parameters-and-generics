@@ -1,38 +1,29 @@
-package org.example;
+import org.example.BoxCache;
+import org.example.Box;
+import org.example.BoxOperations;
 
 public class Main {
     public static void main(String[] args) {
-        // Create a BoxCache instance where key is Integer and value is Box<String, Float>
+        // Step 1: Create a BoxCache instance with Integer keys and Box<String, Float> values
         BoxCache<Integer, Box<String, Float>> boxCache = new BoxCache<>();
 
-        // Create Box instances and add them to the cache
-        Box<String, Float> box1 = new Box<>("FloatBox 1");
-        Box<String, Float> box2 = new Box<>("FloatBox 2");
-        Box<String, Float> box3 = new Box<>("FloatBox 3");
-        Box<String, Float> box4 = new Box<>("FloatBox 1"); // Same name as box1
+        // Step 2: Create Box instances with name and genericAttribute of type String
+        // `T` is String, `V` is Float
+        Box<String, Float> box1 = new Box<>("FloatBox 1", "Attribute 1");
+        Box<String, Float> box2 = new Box<>("FloatBox 2", "Attribute 2");
 
-        // Adding boxes to the cache
+        // Step 3: Add the boxes to the cache
         boxCache.put(1, box1);
         boxCache.put(2, box2);
-        boxCache.put(3, box3);
-        boxCache.put(4, box4); // box4 has the same name as box1
 
-        // Test 1: Retrieve the Box from the cache (key = 1)
+        // Step 4: Retrieve and test the boxes
         Box<String, Float> retrievedBox1 = boxCache.get(1);
-        System.out.println("Test 1 - Retrieved Box Name: " + (retrievedBox1 != null ? retrievedBox1.getGenericAttribute() : "null"));
+        System.out.println("Retrieved Box Name (key 1): " + (retrievedBox1 != null ? retrievedBox1.hasSameName(box1) : "null"));
 
-        // Test 2: Attempt to retrieve a non-existent key (key = 5)
-        Box<String, Float> retrievedBox2 = boxCache.get(5);
-        System.out.println("Test 2 - Retrieved Box Name (non-existent key): " + (retrievedBox2 != null ? retrievedBox2.getGenericAttribute() : "null"));
+        Box<String, Float> retrievedBox2 = boxCache.get(2);
+        System.out.println("Retrieved Box Name (key 2): " + (retrievedBox2 != null ? retrievedBox2.hasSameName(box2) : "null"));
 
-        // Test 3: Retrieve the Box from the cache (key = 2)
-        Box<String, Float> retrievedBox3 = boxCache.get(2);
-        System.out.println("Test 3 - Retrieved Box Name: " + (retrievedBox3 != null ? retrievedBox3.getGenericAttribute() : "null"));
-
-        // Test 4: Compare names using hasSameName (box1 vs. box2)
-        System.out.println("Test 4 - Does box1 have the same name as box2? " + retrievedBox1.hasSameName(retrievedBox3)); // Expect false
-
-        // Test 5: Compare names using hasSameName (box1 vs. box4)
-        System.out.println("Test 5 - Does box1 have the same name as box4? " + retrievedBox1.hasSameName(box4)); // Expect true
+        // Test for name comparison
+        System.out.println("Does box1 have the same name as box2? " + box1.hasSameName(box2)); // Expected: false
     }
 }
